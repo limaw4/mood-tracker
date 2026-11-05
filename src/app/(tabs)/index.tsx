@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { Image, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // --- Mock data (replace with real data later) ---
-const couple = { me: 'Maya', partner: 'Jamie', days: 248 };
+const couple = { me: 'Ize', partner: 'Lim', days: 248 };
 const note = {
   text: 'No need to have it all figured out. I’m in your corner, always.',
   time: '12:42 PM',
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
 
-  hero: { backgroundColor: Colors.backgroundCard, borderRadius: 28, overflow: 'hidden', marginBottom: 16, ...cardShadow },
+  hero: { backgroundColor: Colors.backgroundCard, borderRadius: 24, overflow: 'hidden', marginBottom: 16, ...cardShadow },
   heroTop: {
     backgroundColor: Colors.lavender,
     flexDirection: 'row',
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   heroCaption: { fontSize: 13, color: Colors.textPrimary },
 
-  checkIn: { backgroundColor: Colors.blush, borderRadius: 28, padding: 20, marginBottom: 16 },
+  checkIn: { backgroundColor: Colors.blush, borderRadius: 24, padding: 20, marginBottom: 16 },
   checkInRow: { flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 16 },
   weatherBubble: {
     width: 48,
