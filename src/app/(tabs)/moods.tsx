@@ -1,10 +1,12 @@
 import { DEFAULT as Colors } from '@/constants/Colors';
 import { MOODS, MoodId, TimeOfDay, saveMoodEntry } from '@/libs/moods';
+import { periodImages } from '@/libs/period-images';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -17,10 +19,10 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PARTNER = 'Lim'; // mock: replace with linked partner name
-const TODS: { id: TimeOfDay; label: string; emoji: string }[] = [
-  { id: 'morning', label: 'Morning', emoji: '☀️' },
-  { id: 'afternoon', label: 'Afternoon', emoji: '🌤️' },
-  { id: 'evening', label: 'Evening', emoji: '🌙' },
+const TODS: { id: TimeOfDay; label: string }[] = [
+  { id: 'morning', label: 'Morning' },
+  { id: 'afternoon', label: 'Afternoon' },
+  { id: 'evening', label: 'Evening' },
 ];
 const DEFAULT_TRIGGERS = ['Work', 'Sleep', 'Relationships', 'Health', 'Not sure'];
 const MAX_NOTE = 2000;
@@ -137,7 +139,7 @@ export default function MoodsScreen() {
                     onPress={() => setTod(t.id)}
                     style={[styles.todPill, on && styles.todPillOn]}
                   >
-                    <Text style={{ fontSize: 12 }}>{t.emoji}</Text>
+                    <Image source={periodImages[t.id]} style={styles.todIcon} resizeMode="contain" />
                     <Text style={[styles.todText, on && { color: '#fff', fontWeight: '700' }]}>{t.label}</Text>
                   </Pressable>
                 );
@@ -158,7 +160,7 @@ export default function MoodsScreen() {
                     onPress={() => setMoodId(m.id)}
                     style={[styles.moodCard, on && styles.moodCardOn]}
                   >
-                    <Text style={styles.moodEmoji}>{m.emoji}</Text>
+                    <Image source={m.image} style={styles.moodImage} resizeMode="contain" />
                     <Text style={[styles.moodLabel, on && { fontWeight: '700' }]}>
                       {m.label}
                       {on ? ' ✓' : ''}
@@ -181,7 +183,7 @@ export default function MoodsScreen() {
 
               {/* chosen mood */}
               <View style={styles.chosen}>
-                <Text style={{ fontSize: 30 }}>{mood.emoji}</Text>
+                <Image source={mood.image} style={styles.chosenImage} resizeMode="contain" />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.chosenName}>{mood.label}</Text>
                   <Text style={styles.chosenTip}>{mood.tip}</Text>
@@ -371,6 +373,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
   },
   todPillOn: { backgroundColor: Colors.brand, borderColor: Colors.brand },
+  todIcon: { width: 16, height: 16 },
   todText: { fontSize: 12, color: Colors.textPrimary },
 
   dateRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
@@ -389,7 +392,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
   },
   moodCardOn: { backgroundColor: Colors.lavender, borderColor: Colors.lavenderText, borderWidth: 1.5 },
-  moodEmoji: { fontSize: 22 },
+  moodImage: { width: 28, height: 28 },
   moodLabel: { fontSize: 12, color: Colors.textPrimary },
 
   hint: { backgroundColor: Colors.lavender, borderRadius: 16, padding: 16, marginTop: 20 },
@@ -405,6 +408,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 14,
   },
+  chosenImage: { width: 36, height: 36 },
   chosenName: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary },
   chosenTip: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
 

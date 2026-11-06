@@ -1,5 +1,6 @@
 import AppHeader, { HeaderIcon } from '@/components/AppHeader';
 import { DEFAULT as Colors } from '@/constants/Colors';
+import { periodImages } from '@/libs/period-images';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Image, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -7,7 +8,7 @@ import { Image, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, Vi
 // --- Mock data (replace with real data later) ---
 const couple = { me: 'Ize', partner: 'Lim', days: 248 };
 const note = {
-  text: 'No need to have it all figured out. I’m in your corner, always.',
+  text: 'No need to have it all figured out. I\'m in your corner, always.',
   time: '12:42 PM',
 };
 // Drop your illustration in assets/images and swap this line:
@@ -23,9 +24,9 @@ const tiles: { id: string; title: string; sub: string; icon: IconName; bg: strin
 
 function getPeriod() {
   const h = new Date().getHours();
-  if (h < 12) return { name: 'morning', emoji: '🌅' };
-  if (h < 18) return { name: 'afternoon', emoji: '🌤️' };
-  return { name: 'evening', emoji: '🌙' };
+  if (h < 12) return { name: 'morning', image: periodImages.morning };
+  if (h < 18) return { name: 'afternoon', image: periodImages.afternoon };
+  return { name: 'evening', image: periodImages.evening };
 }
 
 export default function HomeScreen() {
@@ -73,10 +74,10 @@ export default function HomeScreen() {
         <View style={styles.checkIn}>
           <View style={styles.checkInRow}>
             <View style={styles.weatherBubble}>
-              <Text style={{ fontSize: 24 }}>{period.emoji}</Text>
+              <Image source={period.image} style={styles.weatherIcon} resizeMode="contain" />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.checkInTitle}>How’s your heart, {couple.me}?</Text>
+              <Text style={styles.checkInTitle}>How's your heart, {couple.me}?</Text>
               <Text style={styles.checkInSub}>Your {period.name} check-in is here.</Text>
             </View>
           </View>
@@ -95,7 +96,7 @@ export default function HomeScreen() {
             <Text style={styles.noteLabel}>A LITTLE NOTE FROM {couple.partner.toUpperCase()}</Text>
             <Ionicons name="heart-outline" size={20} color={Colors.brand} />
           </View>
-          <Text style={styles.noteText}>“{note.text}”</Text>
+          <Text style={styles.noteText}>"{note.text}"</Text>
           <View style={styles.noteFooter}>
             <Text style={styles.noteMeta}>Sent with love · {note.time}</Text>
             <Pressable hitSlop={8} onPress={() => {}}>
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  weatherIcon: { width: 32, height: 32 },
   checkInTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary },
   checkInSub: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
   checkInButton: {
