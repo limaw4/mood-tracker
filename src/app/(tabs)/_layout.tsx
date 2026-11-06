@@ -1,21 +1,23 @@
 import { DEFAULT as Colors } from '@/constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
+import { Fonts } from '@/constants/theme';
 import { Tabs } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import { ColorValue } from 'react-native';
+import { HomeIcon, MoodIcon, HeartHandshakeIcon, GalleryIcon } from '@/components/Icons';
 
-type IconName = keyof typeof Ionicons.glyphMap;
+type IconComponent = React.ComponentType<{ size?: number; color?: ColorValue }>;
 
-const TABS: { name: string; title: string; icon: IconName }[] = [
-  { name: 'index', title: 'Home', icon: 'home-outline' },
-  { name: 'moods', title: 'Moods', icon: 'happy-outline' },
-  { name: 'for-us', title: 'For us', icon: 'heart-circle-outline' },
-  { name: 'memories', title: 'Memories', icon: 'images-outline' },
+const TABS: { name: string; title: string; Icon: IconComponent }[] = [
+  { name: 'index', title: 'Home', Icon: HomeIcon },
+  { name: 'moods', title: 'Moods', Icon: MoodIcon },
+  { name: 'for-us', title: 'For us', Icon: HeartHandshakeIcon },
+  { name: 'memories', title: 'Memories', Icon: GalleryIcon },
 ];
 
-function TabLabel({ title, focused, color }: { title: string; focused: boolean; color: string }) {
+function TabLabel({ title, focused, color }: { title: string; focused: boolean; color: ColorValue }) {
   return (
     <View style={styles.labelWrap}>
-      <Text style={[styles.label, { color, fontWeight: focused ? '700' : '500' }]}>{title}</Text>
+      <Text style={[styles.label, { color: color || Colors.textSecondary, fontFamily: focused ? Fonts.bold : Fonts.medium }]}>{title}</Text>
       <View style={[styles.dot, { opacity: focused ? 1 : 0 }]} />
     </View>
   );
@@ -40,7 +42,7 @@ export default function TabsLayout() {
           name={t.name}
           options={{
             title: t.title,
-            tabBarIcon: ({ color, size }) => <Ionicons name={t.icon} size={size} color={color} />,
+            tabBarIcon: ({ color, size }) => <t.Icon size={size} color={(color as ColorValue) || Colors.textSecondary} />,
             tabBarLabel: ({ color, focused }) => (
               <TabLabel title={t.title} focused={focused} color={color} />
             ),

@@ -1,4 +1,5 @@
 import { DEFAULT as Colors } from '@/constants/Colors';
+import { Fonts } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ReactNode } from 'react';
@@ -17,7 +18,7 @@ export default function AppHeader({ title, brand, showBack, right }: Props) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[style.container, { paddingTop: insets.top + 8 }]}>
+    <View style={[style.container, { paddingTop: insets.top + 8, height: insets.top + 52 }]}>
       <View style={style.left}>
         {brand ? (
           <Text style={style.brandText}>LITTLE US</Text>
@@ -59,16 +60,17 @@ const style = StyleSheet.create({
   right: { minWidth: 44, alignItems: 'flex-end' },
   brandText: {
     fontSize: 12,
-    fontWeight: '800',
     letterSpacing: 1.6,
     color: Colors.brand,
+    fontFamily: Fonts.extraBold,
   },
   title: {
     flex: 1,
     textAlign: 'center',
-    fontSize: 15,
-    fontWeight: '700',
-    color: Colors.textPrimary,
+    fontSize: 12,
+    textTransform: 'uppercase',
+    color: Colors.textSecondary,
+    fontFamily: Fonts.extraBold,
   },
   iconButton: { padding: 4 },
 });

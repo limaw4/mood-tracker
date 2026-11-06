@@ -1,8 +1,9 @@
+import AppHeader, { HeaderIcon } from '@/components/AppHeader';
 import { DEFAULT as Colors } from '@/constants/Colors';
+import { Fonts } from '@/constants/theme';
 import { MOODS, MoodId, TimeOfDay, saveMoodEntry } from '@/libs/moods';
 import { periodImages } from '@/libs/period-images';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Alert,
@@ -16,7 +17,6 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PARTNER = 'Lim'; // mock: replace with linked partner name
 const TODS: { id: TimeOfDay; label: string }[] = [
@@ -33,9 +33,6 @@ function defaultTod(): TimeOfDay {
 }
 
 export default function MoodsScreen() {
-  const router = useRouter();
-  const insets = useSafeAreaInsets();
-
   const [step, setStep] = useState<'choose' | 'journal'>('choose');
   const [tod, setTod] = useState<TimeOfDay>(defaultTod());
   const [moodId, setMoodId] = useState<MoodId | null>(null);
@@ -98,25 +95,17 @@ export default function MoodsScreen() {
     }
   };
 
-  const onBack = () => (step === 'journal' ? setStep('choose') : router.navigate('/'));
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      {/* HEADER */}
-      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <Pressable onPress={onBack} hitSlop={10} style={styles.headerSide}>
-          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
-        </Pressable>
-        <Text style={styles.headerTitle}>
-          {step === 'choose' ? 'DAILY CHECK-IN' : `${tod.toUpperCase()} · ${shortDate}`}
-        </Text>
-        <View style={[styles.headerSide, { alignItems: 'flex-end' }]}>
-          <Ionicons name="ellipsis-horizontal" size={22} color={Colors.textPrimary} />
-        </View>
-      </View>
+      <AppHeader
+        title={step === 'choose' ? 'DAILY CHECK-IN' : `${tod.toUpperCase()} · ${shortDate}`}
+        showBack
+        right={<HeaderIcon name="ellipsis-horizontal" />}
+      />
 
       <ScrollView
         contentContainerStyle={styles.scroll}
@@ -140,7 +129,7 @@ export default function MoodsScreen() {
                     style={[styles.todPill, on && styles.todPillOn]}
                   >
                     <Image source={periodImages[t.id]} style={styles.todIcon} resizeMode="contain" />
-                    <Text style={[styles.todText, on && { color: '#fff', fontWeight: '700' }]}>{t.label}</Text>
+                    <Text style={[styles.todText, on && { color: '#fff' }]}>{t.label}</Text>
                   </Pressable>
                 );
               })}
@@ -161,7 +150,7 @@ export default function MoodsScreen() {
                     style={[styles.moodCard, on && styles.moodCardOn]}
                   >
                     <Image source={m.image} style={styles.moodImage} resizeMode="contain" />
-                    <Text style={[styles.moodLabel, on && { fontWeight: '700' }]}>
+                    <Text style={[styles.moodLabel, on && { fontFamily: Fonts.bold }]}>
                       {m.label}
                       {on ? ' ✓' : ''}
                     </Text>
@@ -256,7 +245,7 @@ export default function MoodsScreen() {
                       onPress={() => toggleTrigger(t)}
                       style={[styles.chip, on && styles.chipOn]}
                     >
-                      <Text style={[styles.chipText, on && { color: '#fff', fontWeight: '700' }]}>{t}</Text>
+                      <Text style={[styles.chipText, on && { color: '#fff', fontFamily: Fonts.bold }]}>{t}</Text>
                     </Pressable>
                   );
                 })}
@@ -351,14 +340,14 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     fontSize: 11,
-    fontWeight: '700',
     letterSpacing: 1.4,
     color: Colors.textSecondary,
+    fontFamily: Fonts.bold,
   },
 
   scroll: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 24 },
-  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', color: Colors.textPrimary },
-  subtitle: { fontSize: 14, lineHeight: 20, color: Colors.textSecondary, marginTop: 8, marginBottom: 18 },
+  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  subtitle: { fontSize: 14, lineHeight: 20, color: Colors.textSecondary, marginTop: 8, marginBottom: 18, fontFamily: Fonts.regular },
 
   todRow: { flexDirection: 'row', gap: 8, marginBottom: 18 },
   todPill: {
@@ -374,11 +363,11 @@ const styles = StyleSheet.create({
   },
   todPillOn: { backgroundColor: Colors.brand, borderColor: Colors.brand },
   todIcon: { width: 16, height: 16 },
-  todText: { fontSize: 12, color: Colors.textPrimary },
+  todText: { fontSize: 12, color: Colors.textPrimary, fontFamily: Fonts.medium },
 
   dateRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-  dateLeft: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, color: Colors.textSecondary },
-  dateRight: { fontSize: 11, color: Colors.textSecondary },
+  dateLeft: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, color: Colors.textSecondary, fontFamily: Fonts.bold },
+  dateRight: { fontSize: 11, color: Colors.textSecondary, fontFamily: Fonts.regular },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 12 },
   moodCard: {
@@ -393,10 +382,10 @@ const styles = StyleSheet.create({
   },
   moodCardOn: { backgroundColor: Colors.lavender, borderColor: Colors.lavenderText, borderWidth: 1.5 },
   moodImage: { width: 28, height: 28 },
-  moodLabel: { fontSize: 12, color: Colors.textPrimary },
+  moodLabel: { fontSize: 12, color: Colors.textPrimary, fontFamily: Fonts.medium },
 
   hint: { backgroundColor: Colors.lavender, borderRadius: 16, padding: 16, marginTop: 20 },
-  hintText: { fontSize: 13, lineHeight: 19, color: Colors.lavenderText },
+  hintText: { fontSize: 13, lineHeight: 19, color: Colors.lavenderText, fontFamily: Fonts.regular },
 
   chosen: {
     flexDirection: 'row',
@@ -409,8 +398,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   chosenImage: { width: 36, height: 36 },
-  chosenName: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary },
-  chosenTip: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  chosenName: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  chosenTip: { fontSize: 12, color: Colors.textSecondary, marginTop: 2, fontFamily: Fonts.regular },
 
   card: {
     backgroundColor: Colors.backgroundCard,
@@ -420,18 +409,18 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
     marginBottom: 22,
   },
-  cardTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary },
+  cardTitle: { fontSize: 14, fontWeight: '700', color: Colors.textPrimary, fontFamily: Fonts.bold },
   intensityTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  intensityValue: { fontSize: 18, fontWeight: '800', color: Colors.brand },
+  intensityValue: { fontSize: 18, fontWeight: '800', color: Colors.brand, fontFamily: Fonts.extraBold },
   segments: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10 },
   segHit: { flex: 1, height: 32, justifyContent: 'center' },
   seg: { height: 8, borderRadius: 4, backgroundColor: '#EFE6E3' },
   intensityLabels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 2 },
-  tinyCaps: { fontSize: 10, fontWeight: '700', letterSpacing: 1.1, color: Colors.textSecondary },
+  tinyCaps: { fontSize: 10, fontWeight: '700', letterSpacing: 1.1, color: Colors.textSecondary, fontFamily: Fonts.bold },
 
   sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  sectionTitle: { fontSize: 16, fontWeight: '800', color: Colors.textPrimary },
-  optional: { fontSize: 11, fontWeight: '700', color: Colors.brand },
+  sectionTitle: { fontSize: 16, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  optional: { fontSize: 11, fontWeight: '700', color: Colors.brand, fontFamily: Fonts.bold },
   noteBox: {
     backgroundColor: Colors.backgroundCard,
     borderRadius: 16,
@@ -439,8 +428,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
     padding: 14,
   },
-  noteInput: { minHeight: 90, fontSize: 14, lineHeight: 21, color: Colors.textPrimary, padding: 0 },
-  counter: { fontSize: 10, color: Colors.textSecondary, textAlign: 'right', marginTop: 6 },
+  noteInput: { minHeight: 90, fontSize: 14, lineHeight: 21, color: Colors.textPrimary, padding: 0, fontFamily: Fonts.regular },
+  counter: { fontSize: 10, color: Colors.textSecondary, textAlign: 'right', marginTop: 6, fontFamily: Fonts.regular },
 
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
@@ -452,7 +441,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
   },
   chipOn: { backgroundColor: Colors.brand, borderColor: Colors.brand },
-  chipText: { fontSize: 12, color: Colors.textPrimary },
+  chipText: { fontSize: 12, color: Colors.textPrimary, fontFamily: Fonts.medium },
   chipInput: {
     minWidth: 120,
     paddingHorizontal: 14,
@@ -463,6 +452,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundCard,
     fontSize: 12,
     color: Colors.textPrimary,
+    fontFamily: Fonts.regular,
   },
 
   privacy: { backgroundColor: Colors.blush, borderRadius: 20, padding: 16, marginTop: 22 },
@@ -475,8 +465,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  privacyTitle: { fontSize: 14, fontWeight: '800', color: Colors.textPrimary },
-  privacySub: { fontSize: 12, color: Colors.textSecondary, marginTop: 1 },
+  privacyTitle: { fontSize: 14, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  privacySub: { fontSize: 12, color: Colors.textSecondary, marginTop: 1, fontFamily: Fonts.regular },
   checkRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -496,7 +486,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkboxOn: { backgroundColor: Colors.brand },
-  checkText: { flex: 1, fontSize: 12, color: Colors.textPrimary },
+  checkText: { flex: 1, fontSize: 12, color: Colors.textPrimary, fontFamily: Fonts.regular },
 
   footer: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 12, backgroundColor: Colors.background },
   cta: {
@@ -508,7 +498,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingVertical: 16,
   },
-  ctaText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  ctaText: { color: '#fff', fontSize: 16, fontWeight: '700', fontFamily: Fonts.bold },
   footNote: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: 6, marginTop: 10 },
-  footNoteText: { fontSize: 11, color: Colors.textSecondary },
+  footNoteText: { fontSize: 11, color: Colors.textSecondary, fontFamily: Fonts.regular },
 });

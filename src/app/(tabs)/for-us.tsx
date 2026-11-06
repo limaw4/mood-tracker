@@ -1,4 +1,5 @@
 import { DEFAULT as Colors } from '@/constants/Colors';
+import { Fonts } from '@/constants/theme';
 import { Activity, COMFORT, DEFAULT_ACTIVITIES } from '@/libs/comfort';
 import { COUPLE } from '@/libs/couple';
 import { MOODS, MoodId, loadMoodEntries } from '@/libs/moods';
@@ -28,7 +29,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AppHeader from '@/components/AppHeader';
 
 const TILE_BG = [Colors.blush, Colors.lavender, Colors.peach, Colors.backgroundCard];
 const randomIdea = (not = -1) => {
@@ -65,7 +66,6 @@ function Breathing() {
 }
 
 export default function ForUsScreen() {
-  const insets = useSafeAreaInsets();
   const [latest, setLatest] = useState<MoodId | null>(null);
   const [sent, setSent] = useState<Sent[]>([]);
   const [notes, setNotes] = useState<Gratitude[]>([]);
@@ -112,9 +112,7 @@ export default function ForUsScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <Text style={styles.brand}>LITTLE US</Text>
-      </View>
+      <AppHeader brand />
 
       <ScrollView
         contentContainerStyle={styles.scroll}
@@ -154,7 +152,7 @@ export default function ForUsScreen() {
         {/* GENTLE RESET */}
         <Text style={[styles.sectionTitle, { marginTop: 26 }]}>A gentle reset</Text>
         <Text style={styles.sectionSub}>
-          {mood ? `Because you’re feeling ${mood.label.toLowerCase()} ${mood.emoji}` : 'Soft ideas for any kind of day'}
+          {mood ? `Because you're feeling ${mood.label.toLowerCase()}` : 'Soft ideas for any kind of day'}
         </Text>
         <View style={{ gap: 10 }}>
           {activities.map((a) => (
@@ -261,20 +259,20 @@ export default function ForUsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   header: { paddingHorizontal: 20, paddingBottom: 8 },
-  brand: { fontSize: 12, fontWeight: '800', letterSpacing: 1.6, color: Colors.brand },
+  brand: { fontSize: 12, fontWeight: '800', letterSpacing: 1.6, color: Colors.brand, fontFamily: Fonts.extraBold },
 
   scroll: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 40 },
-  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', color: Colors.textPrimary },
-  subtitle: { fontSize: 14, color: Colors.textSecondary, marginTop: 6, marginBottom: 20 },
-  sectionTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary, marginBottom: 4 },
-  sectionSub: { fontSize: 12, color: Colors.textSecondary, marginBottom: 12 },
-  tiny: { fontSize: 11, color: Colors.textSecondary },
+  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  subtitle: { fontSize: 14, color: Colors.textSecondary, marginTop: 6, marginBottom: 20, fontFamily: Fonts.regular },
+  sectionTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary, marginBottom: 4, fontFamily: Fonts.extraBold },
+  sectionSub: { fontSize: 12, color: Colors.textSecondary, marginBottom: 12, fontFamily: Fonts.regular },
+  tiny: { fontSize: 11, color: Colors.textSecondary, fontFamily: Fonts.regular },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 12, marginTop: 8 },
   reachTile: { width: '48.5%', borderRadius: 20, paddingVertical: 20, alignItems: 'center', gap: 8 },
-  reachLabel: { fontSize: 13, fontWeight: '700', color: Colors.textPrimary },
-  banner: { marginTop: 12, fontSize: 13, fontWeight: '700', color: Colors.brand },
+  reachLabel: { fontSize: 13, fontWeight: '700', color: Colors.textPrimary, fontFamily: Fonts.bold },
+  banner: { marginTop: 12, fontSize: 13, fontWeight: '700', color: Colors.brand, fontFamily: Fonts.bold },
 
   activity: {
     flexDirection: 'row',
@@ -294,8 +292,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  activityTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary },
-  activitySub: { fontSize: 12, color: Colors.textSecondary, marginTop: 1 },
+  activityTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  activitySub: { fontSize: 12, color: Colors.textSecondary, marginTop: 1, fontFamily: Fonts.regular },
 
   card: {
     backgroundColor: Colors.backgroundCard,
@@ -305,12 +303,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.outline,
   },
-  cardLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.brand, marginBottom: 6 },
-  cardLabelPurple: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.lavenderText, marginBottom: 6 },
-  ideaText: { fontSize: 17, lineHeight: 24, fontWeight: '700', color: Colors.textPrimary },
+  cardLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.brand, marginBottom: 6, fontFamily: Fonts.extraBold },
+  cardLabelPurple: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.lavenderText, marginBottom: 6, fontFamily: Fonts.extraBold },
+  ideaText: { fontSize: 17, lineHeight: 24, fontWeight: '700', color: Colors.textPrimary, fontFamily: Fonts.bold },
   ghostBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 12, alignSelf: 'flex-start' },
-  ghostBtnText: { fontSize: 13, fontWeight: '700', color: Colors.lavenderText },
-  challengeText: { fontSize: 15, lineHeight: 21, fontWeight: '600', color: Colors.textPrimary },
+  ghostBtnText: { fontSize: 13, fontWeight: '700', color: Colors.lavenderText, fontFamily: Fonts.bold },
+  challengeText: { fontSize: 15, lineHeight: 21, fontWeight: '600', color: Colors.textPrimary, fontFamily: Fonts.semiBold },
   checkbox: {
     width: 26,
     height: 26,
@@ -333,20 +331,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 14,
     color: Colors.textPrimary,
+    fontFamily: Fonts.regular,
   },
   addBtn: { width: 42, height: 42, borderRadius: 21, backgroundColor: Colors.brand, alignItems: 'center', justifyContent: 'center' },
   noteRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
-  noteText: { flex: 1, fontSize: 13, lineHeight: 19, color: Colors.textPrimary },
+  noteText: { flex: 1, fontSize: 13, lineHeight: 19, color: Colors.textPrimary, fontFamily: Fonts.regular },
   soon: { flexDirection: 'row', alignItems: 'center', gap: 12, opacity: 0.75 },
 
   backdrop: { flex: 1, backgroundColor: 'rgba(70,52,66,0.45)', justifyContent: 'center', padding: 24 },
   sheet: { backgroundColor: Colors.background, borderRadius: 28, padding: 24 },
-  sheetTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginTop: 8 },
-  sheetText: { fontSize: 15, lineHeight: 23, color: Colors.textPrimary, textAlign: 'center', marginVertical: 18 },
+  sheetTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, textAlign: 'center', marginTop: 8, fontFamily: Fonts.extraBold },
+  sheetText: { fontSize: 15, lineHeight: 23, color: Colors.textPrimary, textAlign: 'center', marginVertical: 18, fontFamily: Fonts.regular },
   cta: { backgroundColor: Colors.brand, borderRadius: 999, paddingVertical: 14, alignItems: 'center' },
-  ctaText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  ctaText: { color: '#fff', fontSize: 16, fontWeight: '700', fontFamily: Fonts.bold },
 
   breathWrap: { height: 220, alignItems: 'center', justifyContent: 'center' },
   breathCircle: { width: 110, height: 110, borderRadius: 55, backgroundColor: Colors.lavender, borderWidth: 2, borderColor: Colors.lavenderText },
-  breathText: { position: 'absolute', bottom: 8, fontSize: 15, fontWeight: '700', color: Colors.lavenderText },
+  breathText: { position: 'absolute', bottom: 8, fontSize: 15, fontWeight: '700', color: Colors.lavenderText, fontFamily: Fonts.bold },
 });

@@ -1,10 +1,11 @@
+import AppHeader from '@/components/AppHeader';
 import { DEFAULT as Colors } from '@/constants/Colors';
+import { Fonts } from '@/constants/theme';
 import { COUPLE } from '@/libs/couple';
 import { MEMORIES, Memory } from '@/libs/memories';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Filter = 'all' | 'photos' | 'letters';
 const FILTERS: { id: Filter; label: string }[] = [
@@ -33,7 +34,6 @@ function Thumb({ m, height, radius }: { m: Memory; height: number; radius: numbe
 }
 
 export default function MemoriesScreen() {
-  const insets = useSafeAreaInsets();
   const [filter, setFilter] = useState<Filter>('all');
   const [faves, setFaves] = useState<Record<string, boolean>>(
     Object.fromEntries(MEMORIES.map((m) => [m.id, !!m.favorite]))
@@ -49,14 +49,15 @@ export default function MemoriesScreen() {
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
-      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <Text style={styles.brand}>LITTLE US</Text>
-        <Text style={styles.headerCenter}>JUST OURS</Text>
-        <Pressable hitSlop={10} onPress={() => {}} style={styles.headerRight}>
-          <Ionicons name="add" size={26} color={Colors.textPrimary} />
-        </Pressable>
-      </View>
+      <AppHeader
+        brand
+        title='Just Ours'
+        right={
+          <Pressable hitSlop={10} onPress={() => {}}>
+            <Ionicons name="add" size={26} color={Colors.textPrimary} />
+          </Pressable>
+        }
+      />
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>The little things we keep.</Text>
@@ -68,7 +69,7 @@ export default function MemoriesScreen() {
             const on = filter === f.id;
             return (
               <Pressable key={f.id} onPress={() => setFilter(f.id)} style={[styles.pill, on && styles.pillOn]}>
-                <Text style={[styles.pillText, on && { color: '#fff', fontWeight: '700' }]}>{f.label}</Text>
+                <Text style={[styles.pillText, on && { color: '#fff' }]}>{f.label}</Text>
               </Pressable>
             );
           })}
@@ -168,13 +169,13 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
 
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 8 },
-  brand: { width: 90, fontSize: 12, fontWeight: '800', letterSpacing: 1.6, color: Colors.brand },
-  headerCenter: { flex: 1, textAlign: 'center', fontSize: 11, letterSpacing: 1.4, color: Colors.textSecondary },
+  brand: { width: 90, fontSize: 12, fontWeight: '800', letterSpacing: 1.6, color: Colors.brand, fontFamily: Fonts.extraBold },
+  headerCenter: { flex: 1, textAlign: 'center', fontSize: 11, letterSpacing: 1.4, color: Colors.textSecondary, fontFamily: Fonts.medium },
   headerRight: { width: 90, alignItems: 'flex-end' },
 
   scroll: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 32 },
-  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', color: Colors.textPrimary },
-  subtitle: { fontSize: 14, color: Colors.textSecondary, marginTop: 6, marginBottom: 16 },
+  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  subtitle: { fontSize: 14, color: Colors.textSecondary, marginTop: 6, marginBottom: 16, fontFamily: Fonts.regular },
 
   filters: { flexDirection: 'row', gap: 8, marginBottom: 16 },
   pill: {
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
   },
   pillOn: { backgroundColor: Colors.brand, borderColor: Colors.brand },
-  pillText: { fontSize: 12, color: Colors.textPrimary },
+  pillText: { fontSize: 12, color: Colors.textPrimary, fontFamily: Fonts.medium },
 
   surprise: {
     flexDirection: 'row',
@@ -197,9 +198,9 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
   },
-  surpriseLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.lavenderText },
-  surpriseTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary, marginTop: 2 },
-  surpriseLink: { fontSize: 12, color: Colors.lavenderText, marginTop: 3 },
+  surpriseLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.lavenderText, fontFamily: Fonts.extraBold },
+  surpriseTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary, marginTop: 2, fontFamily: Fonts.extraBold },
+  surpriseLink: { fontSize: 12, color: Colors.lavenderText, marginTop: 3, fontFamily: Fonts.medium },
 
   featured: {
     backgroundColor: Colors.backgroundCard,
@@ -211,25 +212,25 @@ const styles = StyleSheet.create({
   },
   featuredBody: { paddingHorizontal: 8, paddingTop: 14, paddingBottom: 8 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  date: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.textSecondary },
-  featuredTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, marginTop: 8 },
-  featuredText: { fontSize: 13, lineHeight: 19, color: Colors.textSecondary, marginTop: 6 },
+  date: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.textSecondary, fontFamily: Fonts.bold },
+  featuredTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, marginTop: 8, fontFamily: Fonts.extraBold },
+  featuredText: { fontSize: 13, lineHeight: 19, color: Colors.textSecondary, marginTop: 6, fontFamily: Fonts.regular },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10 },
-  meta: { fontSize: 11, color: Colors.textSecondary },
+  meta: { fontSize: 11, color: Colors.textSecondary, fontFamily: Fonts.regular },
 
   thumb: { width: '100%', backgroundColor: Colors.blush, alignItems: 'center', justifyContent: 'center' },
 
-  sectionTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary },
-  viewAll: { fontSize: 12, fontWeight: '700', color: Colors.brand },
+  sectionTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  viewAll: { fontSize: 12, fontWeight: '700', color: Colors.brand, fontFamily: Fonts.bold },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 12 },
   pageCard: { width: '48.5%', borderRadius: 20, padding: 12 },
   letterCard: { backgroundColor: Colors.blush, padding: 16 },
   photoCard: { backgroundColor: Colors.backgroundCard, borderWidth: 1, borderColor: Colors.outline },
-  letterDate: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.brand, marginTop: 10 },
-  pageTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary, marginTop: 6 },
-  pageText: { fontSize: 12, lineHeight: 17, color: Colors.textSecondary, marginTop: 4 },
-  letterLink: { fontSize: 12, fontWeight: '700', color: Colors.brand, marginTop: 'auto', paddingTop: 12 },
+  letterDate: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2, color: Colors.brand, marginTop: 10, fontFamily: Fonts.bold },
+  pageTitle: { fontSize: 15, fontWeight: '800', color: Colors.textPrimary, marginTop: 6, fontFamily: Fonts.extraBold },
+  pageText: { fontSize: 12, lineHeight: 17, color: Colors.textSecondary, marginTop: 4, fontFamily: Fonts.regular },
+  letterLink: { fontSize: 12, fontWeight: '700', color: Colors.brand, marginTop: 'auto', paddingTop: 12, fontFamily: Fonts.bold },
 
   privacy: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 24 },
 });
