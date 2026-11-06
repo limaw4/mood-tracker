@@ -1,8 +1,11 @@
 import AppHeader, { HeaderIcon } from '@/components/AppHeader';
+import { GalleryIcon, SparklesIcon } from '@/components/Icons';
 import { DEFAULT as Colors } from '@/constants/Colors';
+import { Fonts } from '@/constants/theme';
 import { periodImages } from '@/libs/period-images';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import type { ComponentType } from 'react';
 import { Image, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // --- Mock data (replace with real data later) ---
@@ -15,11 +18,9 @@ const note = {
 // const heroImage: ImageSourcePropType | null = require('@/assets/images/our-place.png');
 const heroImage: ImageSourcePropType | null = null;
 
-type IconName = keyof typeof Ionicons.glyphMap;
-
-const tiles: { id: string; title: string; sub: string; icon: IconName; bg: string; fg: string }[] = [
-  { id: 'reset', title: 'A gentle reset', sub: 'Ideas for your mood', icon: 'sparkles-outline', bg: Colors.lavender, fg: Colors.lavenderText },
-  { id: 'keepsakes', title: 'Our keepsakes', sub: '1 little surprise inside', icon: 'images-outline', bg: Colors.peach, fg: Colors.peachText },
+const tiles: { id: string; title: string; sub: string; icon: ComponentType<{ size?: number; color?: string }>; bg: string; fg: string }[] = [
+  { id: 'reset', title: 'A gentle reset', sub: 'Ideas for your mood', icon: SparklesIcon, bg: Colors.lavender, fg: Colors.lavenderText },
+  { id: 'keepsakes', title: 'Our keepsakes', sub: '1 little surprise inside', icon: GalleryIcon, bg: Colors.peach, fg: Colors.peachText },
 ];
 
 function getPeriod() {
@@ -108,19 +109,22 @@ export default function HomeScreen() {
         {/* LITTLE THINGS */}
         <Text style={styles.sectionTitle}>Little things for us</Text>
         <View style={styles.tiles}>
-          {tiles.map((t) => (
-            <Pressable
-              key={t.id}
-              style={({ pressed }) => [styles.tile, { backgroundColor: t.bg }, pressed && { opacity: 0.85 }]}
-              onPress={() => {}}
-            >
-              <Ionicons name={t.icon} size={24} color={t.fg} />
-              <View>
-                <Text style={styles.tileTitle}>{t.title}</Text>
-                <Text style={styles.tileSub}>{t.sub}</Text>
-              </View>
-            </Pressable>
-          ))}
+          {tiles.map((t) => {
+            const Icon = t.icon;
+            return (
+              <Pressable
+                key={t.id}
+                style={({ pressed }) => [styles.tile, { backgroundColor: t.bg }, pressed && { opacity: 0.85 }]}
+                onPress={() => {}}
+              >
+                <Icon size={24} color={t.fg} />
+                <View>
+                  <Text style={styles.tileTitle}>{t.title}</Text>
+                  <Text style={styles.tileSub}>{t.sub}</Text>
+                </View>
+              </Pressable>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
@@ -139,15 +143,15 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   scroll: { paddingHorizontal: 20, paddingBottom: 32 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  date: { fontSize: 12, letterSpacing: 1, color: Colors.textSecondary },
+  date: { fontSize: 12, letterSpacing: 1, color: Colors.textSecondary, fontFamily: Fonts.medium },
 
   title: {
     fontSize: 30,
     lineHeight: 36,
-    fontWeight: '800',
     color: Colors.brand,
     marginTop: 8,
     marginBottom: 18,
+    fontFamily: Fonts.extraBold,
   },
 
   hero: { backgroundColor: Colors.backgroundCard, borderRadius: 24, overflow: 'hidden', marginBottom: 16, ...cardShadow },
@@ -159,8 +163,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heroNames: { fontSize: 11, fontWeight: '800', letterSpacing: 1.2, color: Colors.lavenderText },
-  heroDays: { fontSize: 11, color: Colors.lavenderText },
+  heroNames: { fontSize: 11, fontWeight: '800', letterSpacing: 1.2, color: Colors.lavenderText, fontFamily: Fonts.extraBold },
+  heroDays: { fontSize: 11, color: Colors.lavenderText, fontFamily: Fonts.medium },
   heroImage: { width: '100%', height: 190 },
   heroPlaceholder: { backgroundColor: Colors.blush, alignItems: 'center', justifyContent: 'center' },
   heroBottom: {
@@ -170,7 +174,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heroCaption: { fontSize: 13, color: Colors.textPrimary },
+  heroCaption: { fontSize: 13, color: Colors.textPrimary, fontFamily: Fonts.regular },
 
   checkIn: { backgroundColor: Colors.blush, borderRadius: 24, padding: 20, marginBottom: 16 },
   checkInRow: { flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 16 },
@@ -183,8 +187,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   weatherIcon: { width: 32, height: 32 },
-  checkInTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary },
-  checkInSub: { fontSize: 13, color: Colors.textSecondary, marginTop: 2 },
+  checkInTitle: { fontSize: 18, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  checkInSub: { fontSize: 13, color: Colors.textSecondary, marginTop: 2, fontFamily: Fonts.regular },
   checkInButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingVertical: 15,
   },
-  checkInButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  checkInButtonText: { color: '#fff', fontSize: 16, fontWeight: '700', fontFamily: Fonts.bold },
 
   noteCard: {
     backgroundColor: Colors.backgroundCard,
@@ -205,15 +209,15 @@ const styles = StyleSheet.create({
     borderColor: Colors.outline,
   },
   noteHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  noteLabel: { fontSize: 11, fontWeight: '800', letterSpacing: 1.1, color: Colors.brand },
-  noteText: { fontSize: 20, lineHeight: 28, fontWeight: '500', color: Colors.textPrimary },
+  noteLabel: { fontSize: 11, fontWeight: '800', letterSpacing: 1.1, color: Colors.brand, fontFamily: Fonts.extraBold },
+  noteText: { fontSize: 20, lineHeight: 28, fontWeight: '500', color: Colors.textPrimary, fontFamily: Fonts.medium },
   noteFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 },
-  noteMeta: { fontSize: 12, color: Colors.textSecondary },
-  noteAction: { fontSize: 13, fontWeight: '700', color: Colors.brand },
+  noteMeta: { fontSize: 12, color: Colors.textSecondary, fontFamily: Fonts.regular },
+  noteAction: { fontSize: 13, fontWeight: '700', color: Colors.brand, fontFamily: Fonts.bold },
 
-  sectionTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, marginBottom: 12 },
+  sectionTitle: { fontSize: 20, fontWeight: '800', color: Colors.textPrimary, marginBottom: 12, fontFamily: Fonts.extraBold },
   tiles: { flexDirection: 'row', gap: 12 },
   tile: { flex: 1, minHeight: 120, borderRadius: 22, padding: 16, justifyContent: 'space-between' },
-  tileTitle: { fontSize: 16, fontWeight: '800', color: Colors.textPrimary },
-  tileSub: { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  tileTitle: { fontSize: 16, fontWeight: '800', color: Colors.textPrimary, fontFamily: Fonts.extraBold },
+  tileSub: { fontSize: 12, color: Colors.textSecondary, marginTop: 2, fontFamily: Fonts.regular },
 });

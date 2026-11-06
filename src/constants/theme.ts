@@ -13,7 +13,7 @@ export const Colors = {
     background: '#ffffff',
     backgroundElement: '#F0F0F3',
     backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
+    textSecondary: '#867480',
   },
   dark: {
     text: '#ffffff',
@@ -26,30 +26,16 @@ export const Colors = {
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: 'var(--font-display)',
-    serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
-    mono: 'var(--font-mono)',
-  },
-});
+export const Fonts = {
+  extraLight: 'Nunito-ExtraLight',
+  light: 'Nunito-Light',
+  regular: 'Nunito-Regular',
+  medium: 'Nunito-Medium',
+  semiBold: 'Nunito-SemiBold',
+  bold: 'Nunito-Bold',
+  extraBold: 'Nunito-ExtraBold',
+  black: 'Nunito-Black',
+};
 
 export const Spacing = {
   half: 2,
